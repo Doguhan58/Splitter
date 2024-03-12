@@ -1,0 +1,19 @@
+server.port: 9000
+logging:
+  level:
+    root: info
+    org.springframework.jdbc.core: trace
+
+spring:
+  datasource:
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    url: ${DB_URL} #jdbc:postgresql://localhost:5432/splitter
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            scope: read:public_repo

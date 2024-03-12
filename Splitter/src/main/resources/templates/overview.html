@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Splitter</title>
+  <link rel="stylesheet" href="../static/css/bootstrap.css"
+        th:href="@{/css/bootstrap.css}">
+</head>
+<body>
+
+<h1 class="text-center alert alert-secondary d-grid gap-2 mx-auto mx-0 mb-0">
+  SPLITTER</h1>
+
+<h2 class=" text-center alert alert-secondary d-grid gap-2 mx-auto mx-0 mb-0">
+  Willkommen<span th:text="${githubName}" style="color: #0d6dfd">Klaus</span>
+</h2>
+
+<div th:if="${messageGruppeSchliessen}" class="alert alert-danger d-grid gap-2 mx-auto m-1"
+     style="width: 20em">
+  <small class="text-center" th:text="${messageGruppeSchliessen}">FEHLER</small>
+</div>
+<div th:if="${messageAddAusgabe}" class="alert alert-danger d-grid gap-2 mx-auto m-1"
+     style="width: 20em">
+  <small class="text-center" th:text="${messageAddAusgabe}">FEHLER</small>
+</div>
+<div th:if="${messageException}" class="alert alert-danger d-grid gap-2 mx-auto m-1"
+     style="width: 20em">
+  <small class="text-center" th:text="${messageException}">FEHLER</small>
+</div>
+
+<br>
+
+<form th:method="post" name="newGruppe" th:action="@{/createGruppe}">
+  <div class="row m-1 justify-content-md-center">
+    <div class="input-group" style="width: 50em">
+      <label class="input-group-text" for="groupName">Name</label>
+      <input class="form-control" name=groupName id="groupName" type="text"
+             placeholder="Name der Gruppe eingeben">
+      <button type="submit" class="btn btn-primary">Erstellen</button>
+    </div>
+  </div>
+  <div th:if="${messageAddGruppe}" class="alert alert-danger d-grid gap-2 mx-auto m-1"
+       role="alert"
+       style="width: 20em">
+    <small class="text-center" th:text="${messageAddGruppe}">AddGroup Error</small>
+  </div>
+</form>
+
+<br>
+
+<h2 class="text-center alert alert-secondary d-grid gap-2 mx-auto m-1">Gruppen</h2>
+<div class="row justify-content-center">
+  <div class="col-5">
+    <table class="table text-center" th:remove="all-but-first">
+      <tr th:each="gruppe : ${gruppen}" th:object="${gruppe}">
+        <div th:if="${!gruppe.isGeschlossen()}">
+          <td>
+            <a th:href="@{/details/{id}(id=${gruppe.getId()})}" style="text-decoration: none">
+              <div class="d-grid gap-2 col-6 mx-auto">
+                <input type="button" class="btn btn-outline-primary" th:value="*{name}"
+                       value="TestGruppe"/>
+              </div>
+            </a>
+          </td>
+        </div>
+      </tr>
+      <tr>
+        <td>
+          coole Gruppe
+        </td>
+      </tr>
+      <tr>
+        <td>
+          coolere Gruppe
+        </td>
+      </tr>
+      <tr>
+        <td>
+          coolste Gruppe
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<h2 class="text-center alert alert-secondary d-grid gap-2 mx-auto m-1">geschlossene Gruppen</h2>
+<div class="row justify-content-center">
+  <div class="col-5">
+    <table class="table text-center" th:remove="all-but-first">
+      <tr th:each="gruppe : ${gruppen}" th:object="${gruppe}">
+        <div th:if="${gruppe.isGeschlossen()}">
+          <td>
+            <a th:href="@{/details/{id}(id=${gruppe.getId()})}" style="text-decoration: none">
+              <div class="d-grid gap-2 col-6 mx-auto">
+                <input type="button" class="btn btn-outline-secondary" th:value="*{name}"
+                       value="TestGruppe"/>
+              </div>
+            </a>
+          </td>
+        </div>
+      </tr>
+      <tr>
+        <td>
+          coole Gruppe
+        </td>
+      </tr>
+      <tr>
+        <td>
+          coolere Gruppe
+        </td>
+      </tr>
+      <tr>
+        <td>
+          coolste Gruppe
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+</body>
+</html>

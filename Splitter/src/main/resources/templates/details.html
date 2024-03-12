@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Gruppendetails</title>
+  <link rel="stylesheet" href="../static/css/bootstrap.css"
+        th:href="@{/css/bootstrap.css}">
+</head>
+<body>
+
+<h1 class="text-center alert alert-secondary d-grid gap-2 mx-auto m-1">
+  Gruppendetails für <span style="color: #0d6dfd" th:text="${gruppe.getName()}">Master Plan</span>
+</h1>
+
+<br>
+
+<a href="/">
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <input type="button" class="btn btn-primary" value="HOMEPAGE"/>
+  </div>
+</a>
+
+<br>
+<hr class="hr"/>
+<br>
+
+<form th:action="@{/GruppeSchliessen}" th:method="post" name="GruppeSchliessen">
+  <input type="hidden" name="id" th:value="${gruppe.getId()}">
+  <div th:switch="${!gruppe.isGeschlossen()}">
+    <div th:case="true" class="d-grid gap-2 col-6 mx-auto">
+      <button type="submit" class="btn btn-primary">Gruppe beenden</button>
+    </div>
+    <div th:case="false" class="d-grid gap-2 col-6 mx-auto">
+      <button type="button" class="btn btn-secondary" disabled aria-label="Gruppe wurde beendet">
+        Gruppe beenden
+      </button>
+    </div>
+  </div>
+</form>
+
+<br>
+<hr class="hr"/>
+<br>
+
+<form th:action="@{/addMitglied}" th:method="post" name="addMieglied">
+  <div th:switch="${!gruppe.isGeschlossen()&&gruppe.isOffenFuerPersonen()}">
+    <div class="row m-1 justify-content-md-center">
+      <div th:case="true" class="input-group" style="width: 50em">
+        <label class="input-group-text" for="name">Person Hinzufügen</label>
+        <input id="name" class="form-control" type="text" placeholder="Name der Person"
+               name="githubName">
+        <button type="submit" class="btn btn-primary">Hinzufügen</button>
+      </div>
+      <div th:case="false" class="input-group" style="width: 50em">
+        <label class="input-group-text" for="namedisabled">Person Hinzufügen</label>
+        <input id="namedisabled" class="form-control" type="text" placeholder="Name der Person"
+               name="githubName" disabled>
+        <button type="button" class="btn btn-secondary" disabled
+                aria-label="Person kann nicht Hinzugefügt werden">Hinzufügen
+        </button>
+      </div>
+    </div>
+  </div>
+  <div th:if="${messageAddPerson}" class="alert alert-danger d-grid gap-2 mx-auto m-1" role="alert"
+       style="width: 20em">
+    <small class="text-center" th:text="${messageAddPerson}">Name Error</small>
+  </div>
+  <input type="hidden" name="id" th:value="${gruppe.getId()}">
+</form>
+
+<br>
+<hr class="hr"/>
+<br>
+
+<form th:action="@{/addAusgabe}" th:method="post" name="addAusgabe">
+  <input type="hidden" name="id" th:value="${gruppe.getId()}">
+  <div class="m-3 input-group justify-content-md-center">
+    <label style="width: 7em" class="input-group-text" for="creditor">Kreditor: </label>
+    <label style="width: 20em; background-color: #9ec4fe;" class="input-group-text" for="creditor"
+           th:text="${githubName}">Klaus</label>
+  </div>
+  <div th:switch="${!gruppe.isGeschlossen()}" class="m-1">
+    <div th:case="true">
+      <input type="hidden" name="kreditor" id="creditor" th:value="${githubName}">
+      <div class="container" style="width: 50em">
+        <div class="row m-1 justify-content-md-center">
+          <div th:each="mitglied : ${gruppe.getMitglieder()}"
+               class="col form-check form-check-inline">
+            <input type="checkbox" class="btn-check" id="btn-check" th:id="'btn-check-'+${mitglied}"
+                   th:name="'check'+${mitglied}"
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check" th:for="'btn-check-'+${mitglied}"
+                   th:text="${mitglied}"
+                   th:value="${mitglied}">Peter</label>
+          </div>
+        </div>
+      </div>
+      <div class="row m-1 justify-content-md-center">
+        <div class="input-group" style="width: 50em">
+          <label class="input-group-text" for="amount">Kosten eingeben: </label>
+          <input class="form-control" type="number" step="0.01" id="amount" name="kosten"><br>
+        </div>
+      </div>
+      <div class="row m-1 justify-content-md-center">
+        <div class="input-group" style="width: 50em">
+          <label class="input-group-text" for="comment">Kommentar eingeben: </label>
+          <input class="form-control" type="text" id="comment" name="beschreibung"><br>
+        </div>
+      </div>
+      <div class="d-grid gap-2 col-6 mx-auto">
+        <button type="submit" class="btn btn-primary">Ausgabe Hinzufügen</button>
+      </div>
+    </div>
+    <div th:case="false">
+      <input type="hidden" name="kreditor" id="creditordisabled" th:value="${githubName}">
+      <div class="container" style="width: 50em">
+        <div class="row m-1 justify-content-md-center">
+          <div th:each="mitglied : ${gruppe.getMitglieder()}"
+               class="col form-check form-check-inline">
+            <input type="checkbox" class="btn-check" id="btn-checkdisabled"
+                   th:id="'btn-check-'+${mitglied}"
+                   th:name="'check'+${mitglied}"
+                   autocomplete="off" disabled>
+            <label class="btn btn-outline-primary" for="btn-checkdisabled"
+                   th:for="'btn-check-'+${mitglied}"
+                   th:text="${mitglied}"
+                   th:value="${mitglied}">Peter</label>
+          </div>
+        </div>
+      </div>
+      <div class="row m-1 justify-content-md-center">
+        <div class="input-group" style="width: 50em">
+          <label class="input-group-text" for="amountdisabled">Kosten eingeben: </label>
+          <input class="form-control" type="number" step="0.01" id="amountdisabled" name="kosten"
+                 disabled><br>
+        </div>
+      </div>
+      <div class="row m-1 justify-content-md-center">
+        <div class="input-group" style="width: 50em">
+          <label class="input-group-text" for="commentdisabled">Kommentar eingeben: </label>
+          <input class="form-control" type="text" id="commentdisabled" name="beschreibung" disabled><br>
+        </div>
+      </div>
+      <div class="d-grid gap-2 col-6 mx-auto">
+        <button type="button" class="btn btn-secondary" disabled
+                aria-label="Gruppe ist geschlossen">Ausgabe Hinzufügen
+        </button>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div th:if="${messageAddAusgabe}" class="alert alert-danger d-grid gap-2 mx-auto m-1" role="alert"
+       style="width: 20em">
+    <small class="text-center" th:text="${messageAddAusgabe}">Name Error</small>
+  </div>
+</form>
+
+<br>
+<hr class="hr"/>
+<br>
+
+<h2 class="text-center alert alert-secondary d-grid gap-2 mx-auto m-1">Transaktionen</h2>
+<div class="row justify-content-center">
+  <div class="col-5">
+    <table class="table text-center">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>sendet</th>
+        <th>an</th>
+      </tr>
+      </thead>
+      <tbody th:remove="all-but-first">
+      <div th:each="transaktion : ${gruppe.getTransaktionen()}" th:object="${transaktion}">
+        <div th:if="${transaktion.name().equals(githubName)}">
+          <tr class="table-danger">
+            <td th:text="*{name}">Peter</td>
+            <td th:text="*{sendet}">100</td>
+            <td th:text="*{an}">Klaus</td>
+          </tr>
+        </div>
+        <div th:if="${transaktion.an().equals(githubName)}">
+          <tr class="table-success">
+            <td th:text="*{name}">Peter</td>
+            <td th:text="*{sendet}">100</td>
+            <td th:text="*{an}">Klaus</td>
+          </tr>
+        </div>
+        <div
+            th:if="${!transaktion.name().equals(githubName) && !transaktion.an().equals(githubName)}">
+          <tr>
+            <td th:text="*{name}">Peter</td>
+            <td th:text="*{sendet}">100</td>
+            <td th:text="*{an}">Klaus</td>
+          </tr>
+        </div>
+      </div>
+      <tr>
+        <td>Dietrich</td>
+        <td>50</td>
+        <td>Peter</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br>
+<hr class="hr"/>
+<br>
+
+<h2 class="text-center alert alert-secondary d-grid gap-2 mx-auto m-1">Ausgaben</h2>
+<div class="row justify-content-center">
+  <div class="col-8">
+    <table class="table text-center">
+      <thead>
+      <tr>
+        <th>Ausgabe</th>
+        <th>Betrag</th>
+        <th>Kreditor</th>
+        <th>Debitoren</th>
+      </tr>
+      </thead>
+      <tbody th:remove="all-but-first">
+      <div th:each="ausgabe : ${gruppe.getAusgaben()}" th:object="${ausgabe}">
+        <div th:switch="${ausgabe.hasUserName(githubName)}">
+          <tr th:case="true" class="table-primary">
+            <td th:text="*{beschreibung}">Kino</td>
+            <td th:text="*{kosten}">100</td>
+            <td th:text="*{kreditor}">Peter</td>
+            <td th:text="*{debitoren}">[Peter, Klaus]</td>
+          </tr>
+          <tr th:case="false">
+            <td th:text="*{beschreibung}">Kino</td>
+            <td th:text="*{kosten}">100</td>
+            <td th:text="*{kreditor}">Peter</td>
+            <td th:text="*{debitoren}">[Peter, Klaus]</td>
+          </tr>
+        </div>
+      </div>
+      <tr>
+        <td>
+          1
+        </td>
+        <td>
+          100
+        </td>
+        <td>
+          Peter
+        </td>
+        <td>
+          Klaus, Dietrich
+        </td>
+      </tr>
+      <tr>
+        <td>
+          1
+        </td>
+        <td>
+          100
+        </td>
+        <td>
+          Peter
+        </td>
+        <td>
+          Klaus, Dietrich
+        </td>
+      </tr>
+      <tr>
+        <td>
+          1
+        </td>
+        <td>
+          100
+        </td>
+        <td>
+          Peter
+        </td>
+        <td>
+          Klaus, Dietrich
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<br>
+</body>
+</html>
