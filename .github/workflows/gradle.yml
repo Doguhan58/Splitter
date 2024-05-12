@@ -15,11 +15,14 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: gradle init
+        working-directory: ./Splitter
         run: gradle init
       - name: Init gradle wrapper
+        working-directory: ./Splitter
         run: gradle wrapper
       - name: Make gradlew executable
-        run: chmod +x gradlew
+        working-directory: ./Splitter
+        run: chmod +x ./gradlew
       - name: Check with Gradle
         working-directory: ./Splitter
         run: ./gradlew check
