@@ -19,7 +19,7 @@ jobs:
       - name: Init gradle wrapper
         run: gradle wrapper
       - name: Make gradlew executable
-        run: chmod +x ./gradlew
+        run: chmod +x gradlew
       - name: Check with Gradle
         working-directory: ./Splitter
         run: ./gradlew check
